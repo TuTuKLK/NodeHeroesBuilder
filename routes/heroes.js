@@ -1,8 +1,9 @@
 const sql = require("mssql/msnodesqlv8");
 const dbConnect = require("../dbConnect");
-const prefix = "/heroes";
+const prefix = "/heroes/";
 
 const heroesRoutes = (app, fs) => {
+
   app.get(`${prefix}`, (req, res) => {
     console.log("Get all Heroes");
     let id = parseInt(req.params.id);
@@ -24,21 +25,21 @@ const heroesRoutes = (app, fs) => {
       (err, result) => {
         console.log('Query launched');
       if (err) console.log(err);
-      else if (result.recordset.length > 0) res.send(result.recordset);
+      else if (result.recordset.length > 0) res.send(result.recordset[0]);
       // .recordset est pour afficher que la partie recordset
       else res.send({ error: "Pas d'élèment avec cet identifiant" });
     });
   });
 
-  app.get(`${prefix}:acc`, (req, res) => {
-    let acc = parseInt(req.params.id);
+  app.get(`${prefix}user/:acc`, (req, res) => {
+    let acc = parseInt(req.params.acc);
     let request = new sql.Request(dbConnect);
     request.query(
       `SELECT * FROM [Heroes] WHERE [UserAccount] = ${acc}`,
       (err, result) => {
         console.log('Query launched');
       if (err) console.log(err);
-      else if (result.recordset.length > 0) res.send(result.recordset[0]);
+      else if (result.recordset.length > 0) res.send(result.recordset);
       // .recordset est pour afficher que la partie recordset
       else res.send({ error: "Pas d'élèment avec cet identifiant" });
     });
