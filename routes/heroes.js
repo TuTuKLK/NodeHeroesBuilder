@@ -3,7 +3,6 @@ const dbConnect = require("../dbConnect");
 const prefix = "/heroes/";
 
 const heroesRoutes = (app, fs) => {
-
   app.get(`${prefix}`, (req, res) => {
     console.log("Get all Heroes");
     let id = parseInt(req.params.id);
@@ -16,19 +15,19 @@ const heroesRoutes = (app, fs) => {
     });
   });
 
-
   app.get(`${prefix}:id`, (req, res) => {
     let id = parseInt(req.params.id);
     let request = new sql.Request(dbConnect);
     request.query(
       `SELECT * FROM [Heroes] WHERE [HeroeID] = ${id}`,
       (err, result) => {
-        console.log('Query launched');
-      if (err) console.log(err);
-      else if (result.recordset.length > 0) res.send(result.recordset[0]);
-      // .recordset est pour afficher que la partie recordset
-      else res.send({ error: "Pas d'élèment avec cet identifiant" });
-    });
+        console.log("Query launched");
+        if (err) console.log(err);
+        else if (result.recordset.length > 0) res.send(result.recordset[0]);
+        // .recordset est pour afficher que la partie recordset
+        else res.send({ error: "Pas d'élèment avec cet identifiant" });
+      }
+    );
   });
 
   app.get(`${prefix}user/:acc`, (req, res) => {
@@ -37,27 +36,19 @@ const heroesRoutes = (app, fs) => {
     request.query(
       `SELECT * FROM [Heroes] WHERE [UserAccount] = ${acc}`,
       (err, result) => {
-        console.log('Query launched');
-      if (err) console.log(err);
-      else if (result.recordset.length > 0) res.send(result.recordset);
-      // .recordset est pour afficher que la partie recordset
-      else res.send({ error: "Pas d'élèment avec cet identifiant" });
-    });
+        console.log("Query launched");
+        if (err) console.log(err);
+        else if (result.recordset.length > 0) res.send(result.recordset);
+        else res.send({ error: "Pas d'élèment avec cet identifiant" });
+      }
+    );
   });
 
-
-
-
-
-
-
-
-
-  app.post(`${prefix}`,
-  (req, res) => {
+  app.post(`${prefix}`, (req, res) => {
     let body = req.body;
     let request = new sql.Request(dbConnect);
-    request.query(`INSERT INTO Heroes
+    request.query(
+      `INSERT INTO Heroes
         (UserAccount,
         [Name],
         FirstName,
@@ -72,10 +63,6 @@ const heroesRoutes = (app, fs) => {
         Intelligence,
         Wisdom,
         Charisma)
-
-
-
-
 
         VALUES (
         '${body.UserAccount}',
@@ -93,14 +80,23 @@ const heroesRoutes = (app, fs) => {
         '${body.Wisdom}',
         '${body.Charisma}'
         )`,
-        (err, result)=>{
-            if(err) console.log(err);
-            else res.send(result.rowsAffected)
-        }
-        
-        
+      (err, result) => {
+        if (err) console.log(err);
+        else res.send(result.rowsAffected);
+      }
     );
-  })
+  });
 
+  app.delete(`${prefix}:id`,
+  (req, res) => {
+    let id = parseInt(req.params.id);
+    let request = new sql.Request(dbConnect);
+    request.query(`DELETE FROM Heroes WHERE HeroeID = ${id}`,
+    ( err,result)=>{
+      if (err) console.log(err);
+      else res.send(result.rowsAffected);
+    }
+    )
+  })
 };
 module.exports = heroesRoutes;

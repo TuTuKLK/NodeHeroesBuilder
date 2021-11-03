@@ -3,13 +3,13 @@ CREATE DATABASE [BuilderHeroes];
 USE [BuilderHeroes];
 GO
 
-CREATE TABLE UserAccount (
+CREATE TABLE UserAccounts (
     UserID INTEGER PRIMARY KEY IDENTITY(1,1),
 	Mail VARCHAR(64),
     [LastName] VARCHAR(50),
     [FirstName] VARCHAR(50),
     [Login] VARCHAR(50) UNIQUE NOT NULL,
-    [Password] VARBINARY(32) NOT NULL	
+    [Password] VARCHAR(32) NOT NULL	
 )
 
 
@@ -17,7 +17,7 @@ GO
 
 CREATE TABLE Heroes (
     HeroeID INTEGER PRIMARY KEY IDENTITY(1,1),
-    UserAccount INTEGER Foreign KEY REFERENCES Account (UserID),
+    UserAccount INTEGER Foreign KEY REFERENCES UserAccounts (UserID),
     [Name] VARCHAR(50) NOT NULL,
     FirstName VARCHAR(50),
     Gender VARCHAR(50),
