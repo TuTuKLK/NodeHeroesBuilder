@@ -98,5 +98,31 @@ const heroesRoutes = (app, fs) => {
     }
     )
   })
+  app.put(`${prefix}:id`,
+  (req, res) => {
+    let id = parseInt(req.params.id);
+    let request = new sql.Request(dbConnect);
+    request.query(`UPDATE Heroes SET
+        [Name]= '${body.UserAccount}'
+        FirstName= '${body.Name}',
+        Gender= '${body.Gender}',
+        Race= '${body.Race}',
+        Experience= '${body.Experience}',
+        [Level]= '${body.Level}',
+        Health= '${body.Health}',
+        Strength= '${body.Strength}',
+        Dexterity= '${body.Dexterity}',
+        Constitution= '${body.Constitution}',
+        Intelligence= '${body.Intelligence}',
+        Wisdom= '${body.Wisdom}',
+        Charisma= '${body.Charisma}'
+    
+    WHERE HeroeID = ${id}`,
+    ( err,result)=>{
+      if (err) console.log(err);
+      else res.send(result.rowsAffected);
+    }
+    )
+  })
 };
 module.exports = heroesRoutes;
