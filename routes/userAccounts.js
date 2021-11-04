@@ -22,7 +22,7 @@ const accountRoutes = (app, fs) => {
       `SELECT UserID, LastName, FirstName, Mail,'******' Password, Login FROM UserAccounts WHERE Login = '${input.Login}' AND Password = ('${input.Password}')`,
       (err, result) => {
         if (err) console.log(err);
-        else res.send(result);
+        else res.send(result.recordset[0]);
         
       }
     );
